@@ -1,6 +1,10 @@
 import XMPP from 'react-native-xmpp';
-const DOMAIN = "jabber.hot-chilli.net";
-const SCHEMA = "ios";
+const DOMAIN = "blah.im";
+const HOST = "jabber.blah.im";
+const PORT=5222;
+const PASSWORD="test123";
+const AUTHMODE="PLAIN";
+
 import {observable} from 'mobx';
 import autobind from 'autobind'
 @autobind
@@ -23,7 +27,7 @@ class XmppStore {
     }
     
     _userForName(name){
-        return name + '@' + DOMAIN + "/" + SCHEMA;
+        return name + '@' + DOMAIN;
     }
 
     sendMessage(message){
@@ -86,8 +90,9 @@ class XmppStore {
         } else {
             this.loginError = null;
 
-            // try to login to test domain with the same password as username
-            XMPP.connect(this._userForName(this.local),this.local);
+             //use this to trust self signed server certificates
+             //XMPP.trustHosts([DOMAIN]);
+            XMPP.connect(this._userForName(this.local), PASSWORD, AUTHMODE, HOST, PORT);
             this.loading = true;
         }
 
